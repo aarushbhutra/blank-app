@@ -1,31 +1,22 @@
 import streamlit as st
 import pandas as pd
 
-# Load the Excel file
+# Load the Excel file with pyarrow as engine
 file_path = 'icl.xlsx'
 
-# Load the Excel file with Pandas
 @st.cache_data
-def load_data(sheet_name=None):
-    return pd.read_excel(file_path, sheet_name=sheet_name)
+def load_data():
+    return pd.read_excel(file_path, engine='pyarrow')
 
-# Sidebar to select a sheet
-sheet_names = pd.ExcelFile(file_path).sheet_names
-selected_sheet = st.sidebar.selectbox('Select a sheet', sheet_names)
+# Load the data
+data = load_data()
 
-# Display the selected sheet's data
-data = load_data(sheet_name=selected_sheet)
-st.write(f"## Displaying data from: {selected_sheet}")
+# Display the data in Streamlit
+st.title("UG Admissions Statistics (2019-2023)")
+st.write("Displaying data from the uploaded Excel file:")
+
+# Show the data in a dataframe
 st.dataframe(data)
-
-# Option to download data as CSV
-csv = data.to_csv(index=False)
-st.download_button(
-    label="Download data as CSV",
-    data=csv,
-    file_name=f"{selected_sheet}_data.csv",
-    mime='text/csv',
-)
 
 # Option to display summary statistics
 if st.checkbox("Show summary statistics"):
