@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Load the CSV file
-file_path = '/icl.csv'
+file_path = 'icl.csv'
 
 @st.cache_data
 def load_data():
